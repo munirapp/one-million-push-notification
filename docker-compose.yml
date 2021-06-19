@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  api:
+    build: .
+    env_file: .env
+    container_name: tada-api
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    ports:
+      - "${NODE_PORT}:${NODE_PORT}"
+    networks:
+      - tada-networks
+
+  db:
+    image: postgres:12.4-alpine
+    container_name: tada-db
+    env_file: .env
+    restart: always
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    environment:
+      POSGTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    networks:
+      - tada-networks
+
+  redis:
+    image: "bitnami/redis:latest"
+    container_name: tada-redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+    networks:
+      - tada-networks
+
+volumes:
+  postgresql:
+
+networks:
+  tada-networks:
