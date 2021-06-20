@@ -8,10 +8,10 @@ const db = require("../../../../db/models");
  *
  * @param {*} job
  * @param {*} totalJobs
- * @param {*} bounceTime
+ * @param {*} bounceTime bounce / delay time in ms
  * @param {*} counter
  */
-const recursiveJobs = async (job, totalJobs, bounceTime = 500, counter = 0) => {
+const recursiveJobs = async (job, totalJobs, bounceTime = 10, counter = 0) => {
   setTimeout(async () => {
     if (totalJobs) {
       const user = await db.User.findOne({ where: { id: counter + 1 } });
